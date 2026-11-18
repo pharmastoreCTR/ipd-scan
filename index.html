@@ -4,7 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a2a52">
-<meta name="apple-mobile-web-app-title" content="สแกนยา IPD">
+<meta name="apple-mobile-web-app-title" content="สแกนยา">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
 <title>สแกนยา IPD</title>
 <script>
 /* =====================================================================
@@ -12,7 +18,7 @@
    เช่น var API_URL = 'https://script.google.com/macros/s/AKfy.../exec';
    ถ้าปล่อยว่าง หน้าเว็บจะถามลิงก์ตอนเปิดครั้งแรก (จำไว้ในเครื่องนั้น)
    ===================================================================== */
-var API_URL = '';
+var API_URL = 'https://script.google.com/macros/s/AKfycbxJYGTR7QCJ_RfSq2TCskDTvzdRyM2-G5ugawiVj1YVtXuTx0aJLgUq0MS05dHXSpiO/exec';
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js" defer></script>
 <style>
@@ -91,6 +97,7 @@ body{--mc:var(--low)}body.in{--mc:var(--ok)}
   <button class="icon" onclick="openSet()" aria-label="ตั้งค่า">⚙</button>
 </header>
 <main>
+  <div class="card" id="install" style="display:none;margin:0 0 10px;border-color:var(--pri)"><b>ติดตั้งเป็นแอปบนหน้าจอ</b><div class="mut" id="installT"></div><button class="btn line2" style="margin-top:8px;padding:6px 12px" onclick="this.parentNode.style.display='none';ls('ipdscan_hideinst','1')">ปิด</button></div>
   <div class="seg"><button class="out on" data-m="out">จ่ายออก (เอายาไป)</button><button class="in" data-m="in">รับยาเข้า</button></div>
   <div class="vf" id="vf">
     <div id="reader"></div>
@@ -333,6 +340,15 @@ $('#quick').checked=ls('ipdscan_quick')==='1';
 $('#quick').onchange=function(){ls('ipdscan_quick',this.checked?'1':'0');toast(this.checked?'สแกนแล้วตัด 1 ทันที':'สแกนแล้วกรอกจำนวนเอง')};
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeSheet();closeSet()}});
 
+(function(){
+  var standalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches;
+  if(standalone||ls('ipdscan_hideinst')==='1')return;
+  var ios=/iPhone|iPad|iPod/.test(navigator.userAgent),inApp=/Line\/|FBAN|FBAV|Instagram/i.test(navigator.userAgent);
+  $('#installT').textContent=inApp?'ตอนนี้เปิดอยู่ในแอป LINE — กดเมนู ⋯ แล้วเลือก “เปิดใน Safari” ก่อน (กล้องใช้ใน LINE ไม่ได้)':
+    ios?'กดปุ่มแชร์ (สี่เหลี่ยมมีลูกศรขึ้น) → “เพิ่มไปยังหน้าจอโฮม” → เพิ่ม จะได้ไอคอน “สแกนยา” เปิดเต็มจอเหมือนแอป':
+    'กดเมนู ⋮ ของ Chrome → “ติดตั้งแอป” หรือ “เพิ่มลงในหน้าจอหลัก”';
+  $('#install').style.display='block';
+})();
 loadStock();
 // เคยอนุญาตกล้องแล้ว → เปิดกล้องให้เลยตอนเปิดหน้า
 window.addEventListener('load',function(){if(ls('ipdscan_cam')==='1')startCam()});
