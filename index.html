@@ -4,354 +4,42 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a2a52">
-<meta name="apple-mobile-web-app-title" content="สแกนยา">
+<meta name="apple-mobile-web-app-title" content="เบิกยา IPD">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
-<title>สแกนยา IPD</title>
-<script>
-/* =====================================================================
-   ตั้งค่าครั้งเดียว: วางลิงก์เว็บแอป Apps Script (ลงท้ายด้วย /exec) ระหว่างเครื่องหมาย ' '
-   เช่น var API_URL = 'https://script.google.com/macros/s/AKfy.../exec';
-   ถ้าปล่อยว่าง หน้าเว็บจะถามลิงก์ตอนเปิดครั้งแรก (จำไว้ในเครื่องนั้น)
-   ===================================================================== */
-var API_URL = 'https://script.google.com/macros/s/AKfycbxJYGTR7QCJ_RfSq2TCskDTvzdRyM2-G5ugawiVj1YVtXuTx0aJLgUq0MS05dHXSpiO/exec';
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js" defer></script>
+<title>ระบบเบิกยา IPD</title>
 <style>
-:root{--bg:#f2f5f9;--card:#fff;--ink:#14233a;--mut:#5a6b80;--line:#d5dde7;--pri:#0a3d7a;--pri2:#e3edf9;--on:#fff;--low:#b6420d;--low2:#fdeee4;--ok:#1b7a4b;--ok2:#e3f4ea;--hd:#0a2a52;color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--bg:#0b1420;--card:#121e2d;--ink:#e6edf6;--mut:#93a4b8;--line:#24364a;--pri:#6aa9f0;--pri2:#17314f;--on:#06182d;--low:#ffa066;--low2:#432010;--ok:#6fd49a;--ok2:#123826;--hd:#07111d;color-scheme:dark}}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,'Sarabun','Noto Sans Thai',Tahoma,sans-serif;font-size:16px;line-height:1.45;font-variant-numeric:tabular-nums}
-button,input{font:inherit;color:inherit}
-header{background:var(--hd);color:#fff;padding:calc(10px + env(safe-area-inset-top,0px)) 14px 10px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5}
-header h1{font-size:17px;margin:0;font-weight:700;flex:1}
-header small{display:block;font-size:12px;font-weight:400;color:#b9c8dc}
-.icon{border:0;background:rgba(255,255,255,.12);color:#fff;border-radius:8px;width:38px;height:38px;font-size:18px;cursor:pointer}
-main{padding:12px 12px calc(24px + env(safe-area-inset-bottom,0px));max-width:560px;margin:0 auto}
-.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.seg button{border:2px solid var(--line);background:var(--card);color:var(--mut);border-radius:10px;padding:12px 6px;font-weight:700;font-size:16px;cursor:pointer}
-.seg .out.on{border-color:var(--low);background:var(--low2);color:var(--low)}
-.seg .in.on{border-color:var(--ok);background:var(--ok2);color:var(--ok)}
-body{--mc:var(--low)}body.in{--mc:var(--ok)}
-.vf{position:relative;margin-top:10px;width:100%;aspect-ratio:1/1;max-height:52vh;background:#000;border-radius:12px;overflow:hidden;border:3px solid var(--mc)}
-#reader{position:absolute;inset:0}
-#reader video{width:100%!important;height:100%!important;object-fit:cover}
-#reader img,#reader canvas,#qr-shaded-region{display:none!important}
-.vc{position:absolute;width:40px;height:40px;border:5px solid var(--mc);pointer-events:none;z-index:2}
-.tl{top:14px;left:14px;border-right:0;border-bottom:0;border-top-left-radius:8px}.tr{top:14px;right:14px;border-left:0;border-bottom:0;border-top-right-radius:8px}
-.bl{bottom:14px;left:14px;border-right:0;border-top:0;border-bottom-left-radius:8px}.br{bottom:14px;right:14px;border-left:0;border-top:0;border-bottom-right-radius:8px}
-.line{position:absolute;left:10%;right:10%;top:20%;height:2px;background:var(--mc);box-shadow:0 0 10px var(--mc);z-index:2;display:none;animation:sw 1.8s ease-in-out infinite alternate}
-.vf.live .line{display:block}@keyframes sw{to{top:80%}}
-.idle{position:absolute;inset:0;z-index:3;border:0;background:none;color:#dfe8f2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-weight:600;padding:20px;text-align:center;cursor:pointer}
-.idle svg{width:52px;height:52px}
-.vf.live .idle{display:none}
-.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:4;transition:opacity .25s}
-.flash.on{opacity:.55;transition:none}
-.opts{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 2px;font-size:14px;color:var(--mut)}
-.opts label{display:flex;align-items:center;gap:8px;cursor:pointer}
-.opts input{width:20px;height:20px;accent-color:var(--pri)}
-.row2{display:flex;gap:8px;margin-top:8px}
-.f{flex:1;min-width:0;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
-.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:700;cursor:pointer;background:var(--pri);color:var(--on)}
-.btn.line2{background:none;border:1px solid var(--line);color:var(--ink)}
-.btn:disabled{opacity:.4}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px}
-.card h2{font-size:14px;margin:0 0 6px;color:var(--mut)}
-.r{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}.r:last-child{border:0}
-.r .n{flex:1;min-width:0}.r b{display:block;font-weight:600;overflow-wrap:anywhere}.r small{color:var(--mut);font-size:13px}
-.tag{border-radius:6px;padding:3px 9px;font-size:14px;font-weight:700;white-space:nowrap}
-.t-out{background:var(--low2);color:var(--low)}.t-in{background:var(--ok2);color:var(--ok)}
-.empty{color:var(--mut);text-align:center;padding:12px}
-/* แผ่นผลการสแกน */
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:4px solid var(--mc);border-radius:16px 16px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.25);padding:14px 16px calc(16px + env(safe-area-inset-bottom,0px));transform:translateY(105%);transition:transform .2s;max-height:88vh;overflow:auto}
-.sheet.on{transform:none}
-.sheet .nm{font-size:20px;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
-.sheet .sub{color:var(--mut);font-size:14px}
-.oh{display:flex;align-items:baseline;justify-content:center;gap:8px;background:var(--pri2);border-radius:10px;padding:10px;margin:10px 0}
-.oh b{font-size:46px;line-height:1;color:var(--pri)}
-.ql{text-align:center;font-weight:700;font-size:15px}
-.qrow{display:flex;gap:10px;align-items:center;justify-content:center;margin:8px 0}
-.qrow button{width:56px;height:56px;border:1px solid var(--line);border-radius:12px;background:var(--bg);font-size:26px;cursor:pointer}
-.big{width:110px;height:56px;text-align:center;font-size:28px;font-weight:700;border:2px solid var(--mc);border-radius:12px;background:var(--card)}
-.chips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
-.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 14px;font-size:14px;cursor:pointer}
-.pv{text-align:center;margin:8px 0;font-size:15px}
-.warn{color:var(--low);font-weight:700}
-.go{width:100%;min-height:58px;font-size:19px;margin-top:6px;background:var(--mc);color:#fff}
-.cancel{width:100%;margin-top:8px}
-.toast{position:fixed;left:50%;top:calc(70px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:40;max-width:92vw;text-align:center;font-weight:600}
-.toast.on{opacity:1}
-.modal{position:fixed;inset:0;background:rgba(5,12,20,.6);z-index:30;display:none;align-items:center;justify-content:center;padding:16px}
-.modal.on{display:flex}
-.modal .card{width:100%;max-width:480px;margin:0}
-.mut{color:var(--mut);font-size:13px}
+html,body{margin:0;height:100%;background:#0a2a52;color:#dfe8f2;font-family:-apple-system,'Sarabun','Noto Sans Thai',Tahoma,sans-serif}
+.b{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center}
+.b img{width:84px;height:84px;border-radius:20px}
+.s{width:28px;height:28px;border:3px solid rgba(255,255,255,.25);border-top-color:#ff8a55;border-radius:50%;animation:r .8s linear infinite}
+@keyframes r{to{transform:rotate(360deg)}}
+button{font:inherit;border:0;border-radius:10px;padding:12px 20px;background:#ff8a55;color:#0a2a52;font-weight:700}
 </style>
 </head>
 <body>
-<header>
-  <div style="flex:1"><h1>สแกนยา IPD</h1><small id="st">กำลังโหลด…</small></div>
-  <button class="icon" onclick="openSet()" aria-label="ตั้งค่า">⚙</button>
-</header>
-<main>
-  <div class="card" id="install" style="display:none;margin:0 0 10px;border-color:var(--pri)"><b>ติดตั้งเป็นแอปบนหน้าจอ</b><div class="mut" id="installT"></div><button class="btn line2" style="margin-top:8px;padding:6px 12px" onclick="this.parentNode.style.display='none';ls('ipdscan_hideinst','1')">ปิด</button></div>
-  <div class="seg"><button class="out on" data-m="out">จ่ายออก (เอายาไป)</button><button class="in" data-m="in">รับยาเข้า</button></div>
-  <div class="vf" id="vf">
-    <div id="reader"></div>
-    <i class="vc tl"></i><i class="vc tr"></i><i class="vc bl"></i><i class="vc br"></i><i class="line"></i><div class="flash" id="flash"></div>
-    <button class="idle" id="idle" onclick="startCam()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4zM12 17a4 4 0 100-8 4 4 0 000 8z"/></svg><span id="idleT">แตะเพื่อเปิดกล้อง</span></button>
-  </div>
-  <div class="opts">
-    <label><input type="checkbox" id="quick"> สแกนแล้วตัด 1 ทันที (ไม่ต้องกรอก)</label>
-    <button class="btn line2" style="padding:6px 12px" onclick="stopCam()">ปิดกล้อง</button>
-  </div>
-  <div class="row2"><input class="f" id="manual" placeholder="พิมพ์รหัสยา / ชื่อยา / ยิงบาร์โค้ด" autocomplete="off" enterkeyhint="search"><button class="btn" onclick="manualGo()">ค้นหา</button></div>
-  <div id="cands"></div>
-  <div class="card"><h2>ทำรายการล่าสุด</h2><div id="recent"><div class="empty">ยังไม่มีรายการ</div></div></div>
-</main>
-
-<div class="sheet" id="sheet"></div>
-
-<div class="modal" id="setm">
-  <div class="card">
-    <h2 style="font-size:17px;color:var(--ink)">ตั้งค่าการเชื่อมต่อ</h2>
-    <div class="mut">วางลิงก์เว็บแอป Apps Script (ลิงก์ที่ลงท้ายด้วย <b>/exec</b>)</div>
-    <input class="f" id="apiIn" style="width:100%;margin:10px 0" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" autocapitalize="off" spellcheck="false">
-    <div class="row2"><button class="btn" style="flex:1" onclick="saveSet()">บันทึก</button><button class="btn line2" onclick="closeSet()">ปิด</button></div>
-    <div class="mut" id="setMsg" style="margin-top:8px"></div>
-  </div>
-</div>
-<div class="toast" id="toast"></div>
-
+<div class="b"><img src="apple-touch-icon.png" alt=""><b style="font-size:20px">ระบบเบิกยา IPD</b><div class="s" id="sp"></div><div id="m">กำลังเปิดแอป…</div></div>
 <script>
-var $=function(s){return document.querySelector(s)};
-var STOCK=[],SID={},CODES={},PIN_REQ=false,PIN='',MODE='out',CUR=null,QTY=1,BUSY=false,LAST={c:'',t:0},LOG=[];
-var scanner=null,camBusy=false;
-function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function toast(t,ms){var e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(function(){e.classList.remove('on')},ms||2200)}
-function st(t){$('#st').textContent=t}
-function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){return null}}
-
-// ---------- ลิงก์ API ----------
+/* ตัวโหลดแอป: ดึงหน้าเว็บล่าสุดจาก Apps Script มาแสดง (แก้โค้ดที่ Apps Script ที่เดียว แอปนี้ได้ของใหม่เอง)
+   เปิดครั้งต่อไปขึ้นทันทีจากสำเนาในเครื่อง แล้วแอบดึงเวอร์ชันใหม่เก็บไว้ใช้ครั้งถัดไป */
 (function(){
-  var q=new URLSearchParams(location.search).get('api');
-  if(q){ls('ipdscan_api',q);history.replaceState(null,'',location.pathname)}
+  var SRC='https://script.google.com/macros/s/AKfycbxJYGTR7QCJ_RfSq2TCskDTvzdRyM2-G5ugawiVj1YVtXuTx0aJLgUq0MS05dHXSpiO/exec?raw=1';
+  var KEY='ipd_app_html',cached=null;
+  try{cached=localStorage.getItem(KEY)}catch(e){}
+  function ok(h){return typeof h==='string'&&h.length>5000&&h.indexOf('<!DOCTYPE html>')===0}
+  function show(h){document.open();document.write(h);document.close()}
+  function fetchNew(){return fetch(SRC,{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
+    if(!ok(h))throw new Error('bad');try{localStorage.setItem(KEY,h)}catch(e){}return h})}
+  if(ok(cached)){fetchNew().catch(function(){});show(cached);return}
+  fetchNew().then(show).catch(function(){
+    document.getElementById('sp').style.display='none';
+    document.getElementById('m').innerHTML='เปิดแอปไม่ได้ — ตรวจอินเทอร์เน็ตแล้วลองใหม่<br><br><button onclick="location.reload()">ลองใหม่</button>';
+  });
 })();
-function apiUrl(){return (API_URL||ls('ipdscan_api')||'').trim()}
-function openSet(m){$('#apiIn').value=apiUrl();$('#setMsg').textContent=m||'';$('#setm').classList.add('on')}
-function closeSet(){$('#setm').classList.remove('on')}
-function saveSet(){
-  var v=$('#apiIn').value.trim();
-  if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(v)){$('#setMsg').textContent='ลิงก์ต้องขึ้นต้นด้วย https://script.google.com/ และลงท้ายด้วย /exec';return}
-  ls('ipdscan_api',v);closeSet();loadStock();
-}
-function api(action){
-  var args=[].slice.call(arguments,1),u=apiUrl();
-  if(!u)return Promise.reject(new Error('NOAPI'));
-  // text/plain = ไม่ต้องทำ CORS preflight (Apps Script ไม่รองรับ OPTIONS)
-  return fetch(u,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:action,args:args})})
-    .then(function(r){return r.text()}).then(function(t){
-      try{return JSON.parse(t)}catch(e){throw new Error('BADRESP')}
-    });
-}
-function netErr(e){
-  var m=String(e&&e.message||e);
-  if(m==='NOAPI')return 'ยังไม่ได้ตั้งลิงก์ /exec';
-  if(m==='BADRESP')return 'ลิงก์ตอบกลับไม่ถูกต้อง — ตรวจว่า Deploy เวอร์ชันใหม่แล้ว และตั้ง Who has access = Anyone';
-  return 'เชื่อมต่อไม่ได้ (ตรวจอินเทอร์เน็ต / ลิงก์ /exec)';
-}
-// รหัสคลัง (ถ้าตั้ง STAFF_PIN ในสคริปต์)
-try{PIN=sessionStorage.getItem('ipdscan_pin')||''}catch(e){}
-function needPin(){
-  if(!PIN_REQ||PIN)return true;
-  var p=prompt('กรอกรหัสคลัง');if(!p||!p.trim())return false;
-  PIN=p.trim();try{sessionStorage.setItem('ipdscan_pin',PIN)}catch(e){}return true;
-}
-function authFail(r){if(r&&r.auth){PIN='';try{sessionStorage.removeItem('ipdscan_pin')}catch(e){}}}
-
-// ---------- ข้อมูลยา ----------
-function apply(d){
-  PIN_REQ=!!d.pinRequired;STOCK=d.items||[];SID={};CODES={};
-  STOCK.forEach(function(s,i){s.id=i;SID[String(s.sid).trim().toUpperCase()]=i;(s.barcodes||[]).forEach(function(c){CODES[c]=i})});
-}
-function loadStock(){
-  var c=null;try{c=JSON.parse(ls('ipdscan_stock')||'null')}catch(e){}
-  if(c&&c.items){apply(c);st('ยา '+STOCK.length+' รายการ · กำลังอัปเดต…')}
-  if(!apiUrl()){st('ยังไม่ได้ตั้งค่า');openSet('ใส่ลิงก์ครั้งเดียว เครื่องนี้จะจำไว้');return}
-  api('getStock').then(function(d){
-    if(!d||!d.items)throw new Error('BADRESP');
-    ls('ipdscan_stock',JSON.stringify(d));apply(d);st('ยา '+STOCK.length+' รายการ · พร้อมสแกน');
-  }).catch(function(e){st(STOCK.length?'ออฟไลน์ · ใช้ข้อมูลล่าสุดที่เคยโหลด':'โหลดไม่สำเร็จ');toast(netErr(e),4000)});
-}
-function find(t){
-  if(CODES[t]!=null)return STOCK[CODES[t]];
-  var k=SID[t.toUpperCase()];if(k!=null)return STOCK[k];
-  var l=t.toLowerCase();for(var i=0;i<STOCK.length;i++)if(String(STOCK[i].name).toLowerCase()===l)return STOCK[i];
-  return null;
-}
-
-// ---------- เสียง/สั่น ----------
-var actx=null;
-function beep(ok){
-  try{
-    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
-    var o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);
-    o.frequency.value=ok?1500:300;g.gain.value=.15;o.start();o.stop(actx.currentTime+(ok?.09:.25));
-  }catch(e){}
-  try{navigator.vibrate&&navigator.vibrate(ok?50:[80,60,80])}catch(e){}
-  var f=$('#flash');f.classList.add('on');setTimeout(function(){f.classList.remove('on')},60);
-}
-document.addEventListener('touchstart',function u(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();actx.resume()}catch(e){}document.removeEventListener('touchstart',u)},{passive:true});
-
-// ---------- กล้องสด ----------
-function camMsg(t){$('#idleT').textContent=t||'แตะเพื่อเปิดกล้อง'}
-function setLive(on){$('#vf').classList.toggle('live',on)}
-function startCam(){
-  if(typeof Html5Qrcode==='undefined'){camMsg('กำลังโหลดตัวสแกน…');setTimeout(startCam,400);return}
-  if(camBusy||(scanner&&scanner.isScanning))return;
-  camBusy=true;camMsg('กำลังเปิดกล้อง… ถ้ามีหน้าต่างถาม ให้กด “อนุญาต”');
-  if(!scanner){
-    var F=window.Html5QrcodeSupportedFormats,o={verbose:false,experimentalFeatures:{useBarCodeDetectorIfSupported:true}};
-    if(F)o.formatsToSupport=[F.QR_CODE,F.CODE_128,F.CODE_39,F.EAN_13,F.EAN_8,F.UPC_A,F.DATA_MATRIX];
-    scanner=new Html5Qrcode('reader',o);
-  }
-  var cfg={fps:25,disableFlip:true,qrbox:function(w,h){var z=Math.floor(Math.min(w,h)*.85);return{width:z,height:z}}};
-  scanner.start({facingMode:'environment'},cfg,onCode,function(){}).catch(function(e){
-    if(/NotAllowed|Permission/i.test(String(e&&e.name||e)))throw e;
-    return Html5Qrcode.getCameras().then(function(cs){if(!cs||!cs.length)throw e;return scanner.start(cs[cs.length-1].id,cfg,onCode,function(){})});
-  }).then(function(){camBusy=false;setLive(true);ls('ipdscan_cam','1')}).catch(function(e){
-    camBusy=false;setLive(false);var t=String((e&&e.name)||'')+' '+String((e&&e.message)||e);
-    camMsg(/NotAllowed|Permission/i.test(t)?'ยังไม่ได้อนุญาตกล้อง — iPhone: ตั้งค่า → แอป → Safari → กล้อง → อนุญาต แล้วแตะที่นี่อีกครั้ง':
-           /NotFound|no camera/i.test(t)?'ไม่พบกล้องในเครื่องนี้':'เปิดกล้องไม่ได้ ('+t.trim().slice(0,60)+') แตะเพื่อลองใหม่');
-  });
-}
-function stopCam(){if(scanner&&scanner.isScanning)scanner.stop().then(function(){setLive(false)}).catch(function(){setLive(false)});else setLive(false)}
-document.addEventListener('visibilitychange',function(){if(document.hidden)stopCam()});
-
-// ---------- สแกนเจอ ----------
-function onCode(txt){
-  txt=String(txt||'').trim();var now=Date.now();
-  if(!txt||BUSY)return;
-  if($('#sheet').classList.contains('on'))return;              // กำลังกรอกจำนวนอยู่
-  if(txt===LAST.c&&now-LAST.t<1800)return;                       // กันอ่านซ้ำรหัสเดิมรัวๆ
-  LAST={c:txt,t:now};
-  var s=find(txt);
-  if(!s){beep(false);showUnknown(txt);return}
-  beep(true);
-  if($('#quick').checked){quickTx(s);return}
-  showItem(s);
-}
-function showItem(s){
-  CUR=s;QTY=1;var inn=MODE==='in';
-  $('#sheet').innerHTML='<div class="nm">'+esc(s.name)+'</div><div class="sub">'+esc(s.sid)+' · ที่เก็บ '+esc(s.loc)+'</div>'+
-    '<div class="oh"><span class="mut">คงเหลือ</span><b id="oh">'+s.qty+'</b><span>'+esc(s.unit)+'</span></div>'+
-    '<div class="ql">'+(inn?'จำนวนที่รับเข้า':'จำนวนที่เอาไป')+'</div>'+
-    '<div class="qrow"><button onclick="qa(-1)">−</button><input class="big" id="qv" type="number" inputmode="numeric" min="1" value="1" oninput="qs(this.value)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();confirmTx()}"><button onclick="qa(1)">+</button></div>'+
-    '<div class="chips"><button class="chip" onclick="qa(5)">+5</button><button class="chip" onclick="qa(10)">+10</button><button class="chip" onclick="qa(50)">+50</button></div>'+
-    '<div class="pv" id="pv"></div>'+
-    '<button class="btn go" id="go" onclick="confirmTx()"></button><button class="btn line2 cancel" onclick="closeSheet()">ยกเลิก / สแกนต่อ</button>';
-  $('#sheet').classList.add('on');pv();
-  setTimeout(function(){var q=$('#qv');if(q){q.focus();q.select()}},60);
-  // ยอดล่าสุดจากชีต
-  api('getQty',s.sid).then(function(r){if(CUR===s&&r&&r.ok){s.qty=r.qty;var o=$('#oh');if(o)o.textContent=r.qty;pv()}}).catch(function(){});
-}
-function qa(d){QTY=Math.max(1,QTY+d);var q=$('#qv');if(q)q.value=QTY;pv()}
-function qs(v){QTY=Math.max(0,parseInt(v,10)||0);pv()}
-function pv(){
-  var s=CUR;if(!s)return;var out=MODE==='out',after=s.qty+(out?-QTY:QTY),bad=out&&after<0;
-  $('#pv').innerHTML='หลังทำรายการเหลือ <b>'+after+'</b> '+esc(s.unit)+(bad?'<div class="warn">เกินยอดคงเหลือ</div>':'');
-  var g=$('#go');g.textContent=(out?'ยืนยันจ่ายออก ':'ยืนยันรับเข้า ')+QTY+' '+s.unit;g.disabled=bad||QTY<1;
-}
-function closeSheet(){$('#sheet').classList.remove('on');CUR=null;var q=$('#qv');if(q)q.blur();LAST.t=Date.now()}
-function saveTx(s,q){
-  if(!needPin())return Promise.reject(new Error('PIN'));
-  return api('saveTransaction',{sid:s.sid,mode:MODE,qty:q,pin:PIN}).then(function(r){
-    if(r&&r.ok){s.qty=r.after;addLog(s,q,r.before,r.after);return r}
-    authFail(r);if(r&&r.qty!=null)s.qty=r.qty;throw new Error((r&&r.error)||'บันทึกไม่สำเร็จ');
-  });
-}
-function confirmTx(){
-  var s=CUR,q=QTY;if(!s||q<1||BUSY)return;
-  BUSY=true;var g=$('#go');g.disabled=true;g.textContent='กำลังบันทึก…';
-  saveTx(s,q).then(function(r){
-    BUSY=false;closeSheet();toast((MODE==='out'?'จ่ายออก ':'รับเข้า ')+q+' '+s.unit+' ✓ เหลือ '+r.after);
-  }).catch(function(e){
-    BUSY=false;var m=e.message==='PIN'?'ยังไม่ได้กรอกรหัสคลัง':/BADRESP|Failed|NOAPI/.test(e.message)?netErr(e):e.message;
-    toast(m,3500);if(CUR===s){var o=$('#oh');if(o)o.textContent=s.qty;pv()}
-  });
-}
-function quickTx(s){
-  if(MODE==='out'&&s.qty<1){beep(false);toast(s.name+' หมดแล้ว (คงเหลือ 0)',3000);return}
-  BUSY=true;toast('กำลังบันทึก '+s.name+'…',8000);
-  saveTx(s,1).then(function(r){BUSY=false;toast((MODE==='out'?'−1 ':'+1 ')+s.name+' · เหลือ '+r.after+' '+s.unit,2500)})
-    .catch(function(e){BUSY=false;beep(false);toast(e.message==='PIN'?'ยังไม่ได้กรอกรหัสคลัง':/BADRESP|Failed|NOAPI/.test(e.message)?netErr(e):e.message,3500)});
-}
-function addLog(s,q,b,a){
-  LOG.unshift({n:s.name,u:s.unit,q:q,m:MODE,b:b,a:a,t:new Date()});LOG=LOG.slice(0,15);
-  $('#recent').innerHTML=LOG.map(function(x){var o=x.m==='out';
-    return '<div class="r"><div class="n"><b>'+esc(x.n)+'</b><small>'+x.t.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})+' · '+x.b+' → '+x.a+'</small></div><span class="tag '+(o?'t-out':'t-in')+'">'+(o?'−':'+')+x.q+' '+esc(x.u)+'</span></div>'}).join('');
-}
-
-// ---------- รหัสที่ยังไม่รู้จัก: ผูกกับยา ----------
-var PEND='';
-function showUnknown(code){
-  PEND=code;CUR=null;
-  $('#sheet').innerHTML='<div class="nm">ไม่พบรหัส “'+esc(code)+'”</div><div class="sub">ค้นหายาแล้วแตะเลือก เพื่อผูกรหัสนี้ (ครั้งต่อไปสแกนเจอทันที)</div>'+
-    '<input class="f" id="lk" style="width:100%;margin:10px 0" placeholder="พิมพ์ชื่อยา" oninput="linkList(this.value)" autocomplete="off"><div id="lkl"></div>'+
-    '<button class="btn line2 cancel" onclick="closeSheet()">ยกเลิก / สแกนต่อ</button>';
-  $('#sheet').classList.add('on');linkList('');
-}
-function matches(q,n){q=q.toLowerCase().trim();var a=[];if(!q)return a;
-  for(var i=0;i<STOCK.length&&a.length<n;i++){var s=STOCK[i];if(String(s.name).toLowerCase().indexOf(q)>-1||String(s.sid).toLowerCase()===q)a.push(s)}return a}
-function linkList(q){
-  var a=matches(q,8);
-  $('#lkl').innerHTML=a.length?a.map(function(s){return '<div class="r"><div class="n"><b>'+esc(s.name)+'</b><small>คงเหลือ '+s.qty+' '+esc(s.unit)+'</small></div><button class="btn" style="padding:8px 12px" onclick="doLink('+s.id+')">เลือก</button></div>'}).join(''):'<div class="empty">'+(q?'ไม่พบรายการ':'พิมพ์ชื่อยาเพื่อค้นหา')+'</div>';
-}
-function doLink(id){
-  var s=STOCK[id],c=PEND;if(!s)return;
-  if(!needPin())return;
-  CODES[c]=id;
-  api('linkBarcode',s.sid,c,PIN).then(function(r){if(!r||!r.ok){authFail(r);delete CODES[c];toast((r&&r.error)||'ผูกรหัสไม่สำเร็จ',3000)}else toast('ผูกรหัสแล้ว ✓')}).catch(function(e){delete CODES[c];toast(netErr(e),3000)});
-  showItem(s);
-}
-
-// ---------- พิมพ์/ยิงบาร์โค้ด ----------
-function manualGo(){
-  var v=$('#manual').value.trim();if(!v)return;
-  var s=find(v);
-  if(s){$('#manual').value='';$('#cands').innerHTML='';showItem(s);return}
-  var a=matches(v,8);
-  $('#cands').innerHTML='<div class="card">'+(a.length?a.map(function(s){return '<div class="r"><div class="n"><b>'+esc(s.name)+'</b><small>'+esc(s.sid)+' · คงเหลือ '+s.qty+' '+esc(s.unit)+'</small></div><button class="btn" style="padding:8px 12px" onclick="pickC('+s.id+')">เลือก</button></div>'}).join(''):'<div class="empty">ไม่พบ “'+esc(v)+'”</div>')+'</div>';
-}
-function pickC(id){$('#manual').value='';$('#cands').innerHTML='';showItem(STOCK[id])}
-$('#manual').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();manualGo()}});
-
-// ---------- โหมด ----------
-function setMode(m){
-  MODE=m;document.body.classList.toggle('in',m==='in');
-  document.querySelectorAll('.seg button').forEach(function(b){b.classList.toggle('on',b.dataset.m===m)});
-  if(CUR)showItem(CUR);
-}
-document.querySelectorAll('.seg button').forEach(function(b){b.onclick=function(){setMode(b.dataset.m)}});
-$('#quick').checked=ls('ipdscan_quick')==='1';
-$('#quick').onchange=function(){ls('ipdscan_quick',this.checked?'1':'0');toast(this.checked?'สแกนแล้วตัด 1 ทันที':'สแกนแล้วกรอกจำนวนเอง')};
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeSheet();closeSet()}});
-
-(function(){
-  var standalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches;
-  if(standalone||ls('ipdscan_hideinst')==='1')return;
-  var ios=/iPhone|iPad|iPod/.test(navigator.userAgent),inApp=/Line\/|FBAN|FBAV|Instagram/i.test(navigator.userAgent);
-  $('#installT').textContent=inApp?'ตอนนี้เปิดอยู่ในแอป LINE — กดเมนู ⋯ แล้วเลือก “เปิดใน Safari” ก่อน (กล้องใช้ใน LINE ไม่ได้)':
-    ios?'กดปุ่มแชร์ (สี่เหลี่ยมมีลูกศรขึ้น) → “เพิ่มไปยังหน้าจอโฮม” → เพิ่ม จะได้ไอคอน “สแกนยา” เปิดเต็มจอเหมือนแอป':
-    'กดเมนู ⋮ ของ Chrome → “ติดตั้งแอป” หรือ “เพิ่มลงในหน้าจอหลัก”';
-  $('#install').style.display='block';
-})();
-loadStock();
-// เคยอนุญาตกล้องแล้ว → เปิดกล้องให้เลยตอนเปิดหน้า
-window.addEventListener('load',function(){if(ls('ipdscan_cam')==='1')startCam()});
 </script>
 </body>
 </html>

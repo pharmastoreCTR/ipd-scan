@@ -1,10 +1,10 @@
 {
-  "name": "สแกนยา IPD",
-  "short_name": "สแกนยา",
+  "name": "ระบบเบิกยา IPD",
+  "short_name": "เบิกยา IPD",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f2f5f9",
+  "background_color": "#0a2a52",
   "theme_color": "#0a2a52",
   "icons": [
     {
