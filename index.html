@@ -34,7 +34,13 @@ button{font:inherit;border:0;border-radius:10px;padding:12px 20px;background:#ff
   function show(h){document.open();document.write(h);document.close()}
   function fetchNew(){return fetch(SRC,{cache:'no-store'}).then(function(r){return r.text()}).then(function(h){
     if(!ok(h))throw new Error('bad');try{localStorage.setItem(KEY,h)}catch(e){}return h})}
-  if(ok(cached)){fetchNew().catch(function(){});show(cached);return}
+  if(ok(cached)){
+    var t0=Date.now();
+    // มีเวอร์ชันใหม่ภายใน 8 วินาทีแรกที่เปิด → โหลดใหม่ทันที (ยังไม่ทันได้ใช้งาน) ไม่งั้นได้ของใหม่ตอนเปิดครั้งถัดไป
+    fetchNew().then(function(h){if(h!==cached&&Date.now()-t0<8000)location.reload()}).catch(function(){});
+    // ต้องรอให้หน้านี้โหลดเสร็จก่อน document.open() ถึงจะแทนที่ทั้งหน้าได้ (ถ้าเรียกระหว่างโหลด จะไปแทรกต่อท้ายแทน)
+    document.addEventListener('DOMContentLoaded',function(){show(cached)});return;
+  }
   fetchNew().then(show).catch(function(){
     document.getElementById('sp').style.display='none';
     document.getElementById('m').innerHTML='เปิดแอปไม่ได้ — ตรวจอินเทอร์เน็ตแล้วลองใหม่<br><br><button onclick="location.reload()">ลองใหม่</button>';
