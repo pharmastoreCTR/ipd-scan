@@ -1,11 +1,11 @@
 {
-  "name": "ระบบเบิกยา IPD",
-  "short_name": "เบิกยา IPD",
+  "name": "ระบบคลังยา",
+  "short_name": "ระบบคลังยา",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0a2a52",
-  "theme_color": "#0a2a52",
+  "background_color": "#eef1f6",
+  "theme_color": "#eef1f6",
   "icons": [
     {
       "src": "icon-192.png",

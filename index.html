@@ -3,26 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0a2a52">
-<meta name="apple-mobile-web-app-title" content="เบิกยา IPD">
+<meta name="theme-color" content="#eef1f6">
+<meta name="apple-mobile-web-app-title" content="ระบบคลังยา">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
-<title>ระบบเบิกยา IPD</title>
+<title>ระบบคลังยา</title>
 <style>
-html,body{margin:0;height:100%;background:#0a2a52;color:#dfe8f2;font-family:-apple-system,'Sarabun','Noto Sans Thai',Tahoma,sans-serif}
+html,body{margin:0;height:100%;background:#eef1f6;color:#0f2350;font-family:-apple-system,'Sarabun','Noto Sans Thai',Tahoma,sans-serif}
 .b{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center}
-.b img{width:84px;height:84px;border-radius:20px}
-.s{width:28px;height:28px;border:3px solid rgba(255,255,255,.25);border-top-color:#ff8a55;border-radius:50%;animation:r .8s linear infinite}
+.b img{width:96px;height:96px;border-radius:22px;box-shadow:0 10px 30px rgba(15,35,80,.25)}
+.s{width:28px;height:28px;border:3px solid rgba(15,35,80,.15);border-top-color:#1e3a8a;border-radius:50%;animation:r .8s linear infinite}
 @keyframes r{to{transform:rotate(360deg)}}
-button{font:inherit;border:0;border-radius:10px;padding:12px 20px;background:#ff8a55;color:#0a2a52;font-weight:700}
+button{font:inherit;border:0;border-radius:10px;padding:12px 20px;background:#0f2350;color:#fff;font-weight:700}
 </style>
 </head>
 <body>
-<div class="b"><img src="apple-touch-icon.png" alt=""><b style="font-size:20px">ระบบเบิกยา IPD</b><div class="s" id="sp"></div><div id="m">กำลังเปิดแอป…</div></div>
+<div class="b"><img src="apple-touch-icon.png" alt=""><b style="font-size:22px">ระบบคลังยา</b><div class="s" id="sp"></div><div id="m">กำลังเปิดแอป…</div></div>
 <script>
 /* ตัวโหลดแอป: ดึงหน้าเว็บล่าสุดจาก Apps Script มาแสดง (แก้โค้ดที่ Apps Script ที่เดียว แอปนี้ได้ของใหม่เอง)
    เปิดครั้งต่อไปขึ้นทันทีจากสำเนาในเครื่อง แล้วแอบดึงเวอร์ชันใหม่เก็บไว้ใช้ครั้งถัดไป */
